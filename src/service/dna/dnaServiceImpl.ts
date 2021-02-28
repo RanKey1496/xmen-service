@@ -1,6 +1,7 @@
-import { injectable, interfaces } from "inversify";
-import { Forbidden } from "../../util/exception";
-import DNAService from "./dnaService";
+import { injectable } from 'inversify';
+import { isSetsEqual } from '../../util/main';
+import { Forbidden } from '../../util/exception';
+import DNAService from './dnaService';
 
 @injectable()
 export default class DNAServiceImpl implements DNAService {
@@ -18,7 +19,7 @@ export default class DNAServiceImpl implements DNAService {
      * @param dna DNA Array
      */
     private isSquare(dna: Array<string>): void {
-        const isSameLength = dna.every((value, i, array) => value.length === array.length)
+        const isSameLength = dna.every((value, i, array) => value.length === array.length);
         if (!isSameLength) throw new Forbidden('DNA data isnt NxN');
     }
 
@@ -27,21 +28,18 @@ export default class DNAServiceImpl implements DNAService {
      * @param dna DNA Array
      */
     private lettersAreValid(dna: Array<string>): void {
-        const valid = dna.every((value, i, array) => /^[ACGT]+$/.test(value))
+        const valid = dna.every((value, i, array) => /^[ACGT]+$/.test(value));
         if (!valid) throw new Forbidden('DNA data contains invalid characters');
     }
 
     /**
-     * Convierte la data en una matrix NxN
-     * @param dna DNA Array
+     * Agrega un valor al set de posiciones
+     * @param positions Set de posiciones
+     * @param x Numero de fila que está iterando sobre el DNA Array
+     * @param y Numero de columna que está iterando sobre el DNA Array
      */
-    private formatDNA(dna: Array<string>): Array<Array<string>> {
-        return dna.map(value => Array.from(value));
-    }
-
-    private addCoordinates(positions: Set<string>, x: number, y: number): Set<string> {
-        positions.add(`${x},${y}`)
-        return positions;
+    private addCoordinates(positions: Set<string>, x: number, y: number): void {
+        positions.add(`${x},${y}`);
     }
 
     /**
@@ -57,9 +55,9 @@ export default class DNAServiceImpl implements DNAService {
      * @param word Palabra que intenta buscar
      * @param positions Coordenadas de la palabra se está buscando
      */
-    private iterateOverWord(step: number, dna: Array<Array<string>>, x: number, y: number, 
+    private iterateOverWord(step: number, dna: Array<string>, x: number, y: number,
         word: string, positions: Set<string>): Set<string> {
-            if (word.length == 0) return positions
+            if (word.length == 0) return positions;
             if (step === 1) { x = x; y = y + 1; }
             if (step === 2) { x = x; y = y - 1; }
             if (step === 3) { x = x - 1; y = y; }
@@ -71,7 +69,7 @@ export default class DNAServiceImpl implements DNAService {
             try {
                 if (dna[x][y] === word[0]) {
                     const newWord = word.substring(1);
-                    positions = this.addCoordinates(positions, x, y);
+                    this.addCoordinates(positions, x, y);
                     const valid = this.iterateOverWord(step, dna, x, y, newWord, positions);
                     if (valid) return positions;
                 }
@@ -94,7 +92,7 @@ export default class DNAServiceImpl implements DNAService {
      * @param y Numero de columna que está iterando sobre el DNA Array
      * @param word Palabra que intenta buscar
      */
-    private coordinatesThroughtSteps(dna: Array<Array<string>>, x: number, y: number, word: string): Set<string> {
+    private coordinatesThroughtSteps(dna: Array<string>, x: number, y: number, word: string): Set<string> {
         const steps = [
             {id: 1, detail: 'right'},
             {id: 2, detail: 'left'},
@@ -108,9 +106,9 @@ export default class DNAServiceImpl implements DNAService {
         const newWord = word.substring(1);
         for (const step of steps) {
             let positions = new Set<string>();
-            positions = this.addCoordinates(positions, x, y);
-            positions = this.iterateOverWord(step['id'], dna, x, y, newWord, positions)
-            if (positions) return positions;
+            this.addCoordinates(positions, x, y);
+            positions = this.iterateOverWord(step['id'], dna, x, y, newWord, positions);
+            if (positions?.size === 4) return positions;
         }
     }
 
@@ -126,25 +124,25 @@ export default class DNAServiceImpl implements DNAService {
 
     /**
      * Informa si el ADN es de mutante o no
+     * 
      * @param dna DNA Array
      */
     public isMutant(dna: Array<string>): Promise<void> {
-        const data = this.formatDNA(dna);
-        console.log(data)
         const coordinates: Array<Set<string>> = [];
         for (let x = 0; x < dna.length; x++) {
             for (let y = 0; y < dna[0].length; y++) {
                 const letter = dna[x][y];
-                const positions = this.coordinatesThroughtSteps(data, x, y, `${letter.repeat(4)}`);
-                if (positions && coordinates.indexOf(positions) == -1) {
-                    coordinates.push(positions);
+                const positions = this.coordinatesThroughtSteps(dna, x, y, `${letter.repeat(4)}`);
+                if (positions) {
+                    if (coordinates.every((value, index, array) => !isSetsEqual(value, positions))) {
+                        coordinates.push(positions);
+                    }
+                    if (coordinates.length > 1) {
+                        console.log('Coordenadas: ', coordinates);
+                        return;
+                    }
                 }
             }
-        }
-        console.log(coordinates)
-        if (coordinates.length > 1) {
-            console.log('Is mutant');
-            return;
         }
         throw new Forbidden('DNA isnt from a mutant');
     }

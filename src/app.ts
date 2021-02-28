@@ -14,32 +14,31 @@ import Types from './config/types';
 export default class App {
 
     constructor() {
-        this.start()
+        this.start();
     }
 
     private async init() {
         const app: Application = express();
         app.set('port', process.env.PORT || 3000);
-        app.use(compression())
-        app.use(helmet())
-        app.use(cors())
+        app.use(compression());
+        app.use(helmet());
+        app.use(cors());
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         if (process.env.NODE_ENV === 'development') {
-            app.use(errorHandler())
-            app.use(morgan('dev'))
+            app.use(errorHandler());
+            app.use(morgan('dev'));
         }
 
         const controllers: RegistrableController[] = container.getAll<RegistrableController>(Types.Controller);
         controllers.forEach(controller => controller.register(app));
-        
+
         app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
             if (err instanceof Forbidden) {
                 return forbiddenResponse(res, err.message);
             }
             return internalResponse(res);
         });
-        
         return app;
     }
 
