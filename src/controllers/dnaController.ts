@@ -17,8 +17,9 @@ export class DNAController implements RegistrableController {
             .post(async (req: Request, res: Response, next: NextFunction) => {
                 try {
                     const dna = req.body.dna;
-                    await this.dnaService.validateDNA(dna);
-                    return dataResponse(res, dna);
+                    this.dnaService.validateDNA(dna);
+                    this.dnaService.isMutant(dna);
+                    return dataResponse(res, 'DNA is from a mutant');
                 } catch (error) {
                     return next(error);
                 }
