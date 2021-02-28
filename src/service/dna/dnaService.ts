@@ -1,4 +1,4 @@
 export default interface DNAService {
-    validateDNA(dna: Array<string>): Promise<void>;
-    isMutant(dna: Array<string>): Promise<void>;
+    validateDNA(dna: Array<string>): void;
+    isMutant(dna: Array<string>): void;
 }

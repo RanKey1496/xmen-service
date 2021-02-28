@@ -10,8 +10,8 @@ export default class DNAServiceImpl implements DNAService {
      * Valida si un parametro si es un Array
      * @param dna DNA Array
      */
-    private isArray(dna: Array<string>): void {
-        if (!Array.isArray(dna)) throw new Forbidden('Invalid DNA');
+    private isArrayOrInvalidLength(dna: Array<string>): void {
+        if (dna?.length < 4 || !Array.isArray(dna)) throw new Forbidden('Invalid DNA');
     }
 
     /**
@@ -116,8 +116,8 @@ export default class DNAServiceImpl implements DNAService {
      * Realiza todas las validaciones que debe tener la data enviada
      * @param dna DNA Array
      */
-    public async validateDNA(dna: Array<string>): Promise<void> {
-        this.isArray(dna);
+    public validateDNA(dna: Array<string>): void {
+        this.isArrayOrInvalidLength(dna);
         this.isSquare(dna);
         this.lettersAreValid(dna);
     }
@@ -127,7 +127,7 @@ export default class DNAServiceImpl implements DNAService {
      * 
      * @param dna DNA Array
      */
-    public isMutant(dna: Array<string>): Promise<void> {
+    public isMutant(dna: Array<string>): boolean {
         const coordinates: Array<Set<string>> = [];
         for (let x = 0; x < dna.length; x++) {
             for (let y = 0; y < dna[0].length; y++) {
@@ -139,7 +139,7 @@ export default class DNAServiceImpl implements DNAService {
                     }
                     if (coordinates.length > 1) {
                         console.log('Coordenadas: ', coordinates);
-                        return;
+                        return true;
                     }
                 }
             }
