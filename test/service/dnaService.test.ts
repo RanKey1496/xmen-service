@@ -9,8 +9,14 @@ describe('DNAService', () => {
     const dnaService: DNAService = new DNAServiceImpl();
 
     describe('validateDNA', () => {
+        it('should throw Forbidden if dna length is less than 4', () => {
+            const dna: any = 'abcde';
+            expect(() => dnaService.validateDNA(dna)).toThrow(Forbidden);
+            expect(() => dnaService.validateDNA(dna)).toThrow('Invalid DNA');
+        });
+
         it('should throw Forbidden if dna is not a array', () => {
-            const dna: any = '';
+            const dna: any = ['','',''];
             expect(() => dnaService.validateDNA(dna)).toThrow(Forbidden);
             expect(() => dnaService.validateDNA(dna)).toThrow('Invalid DNA');
         });
@@ -40,6 +46,13 @@ describe('DNAService', () => {
             expect(() => dnaService.validateDNA(dna)).toThrow('DNA data contains invalid characters');
         });
 
+        it('should throw Forbidden if dna array at least 1 invalid row', () => {
+            const dna = DNATestBuilder.newDNA().withRandomValidRow(4).withRandomValidRow(4)
+                .withRandomValidRow(4).withRandomInvalidRow(4).build();
+            expect(() => dnaService.validateDNA(dna)).toThrow(Forbidden);
+            expect(() => dnaService.validateDNA(dna)).toThrow('DNA data contains invalid characters');
+        });
+
         it('should throw Forbidden if dna array have lower case valid chars', () => {
             const dna = DNATestBuilder.newDNA().withRandomValidRow(4).withRandomValidRow(4)
                 .withRandomValidRow(4).withRow('atcg').build();
@@ -54,8 +67,14 @@ describe('DNAService', () => {
             expect(() => dnaService.validateDNA(dna)).toThrow('DNA data contains invalid characters');
         });
 
+        it('should throw Forbidden if dna have invalid values', () => {
+            const dna = DNATestBuilder.newDNA().withInvalidValues().build();
+            expect(() => dnaService.validateDNA(dna)).toThrow(Forbidden);
+            expect(() => dnaService.validateDNA(dna)).toThrow('DNA data contains invalid characters');
+        });
+
         it('should be ok with valid DNA', () => {
-            const dna = DNATestBuilder.newDNA().withRandomValidDNA(4).build();
+            const dna = DNATestBuilder.newDNA().withValidValues().build();
             dnaService.validateDNA(dna);
         });
     });

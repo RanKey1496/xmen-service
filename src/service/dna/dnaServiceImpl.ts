@@ -138,7 +138,6 @@ export default class DNAServiceImpl implements DNAService {
                         coordinates.push(positions);
                     }
                     if (coordinates.length > 1) {
-                        console.log('Coordenadas: ', coordinates);
                         return true;
                     }
                 }
