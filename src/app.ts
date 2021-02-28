@@ -25,10 +25,8 @@ export default class App {
         app.use(cors());
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
-        if (process.env.NODE_ENV === 'development') {
-            app.use(errorHandler());
-            app.use(morgan('dev'));
-        }
+        app.use(morgan('common'));
+        if (process.env.NODE_ENV === 'development') app.use(errorHandler());
 
         const controllers: RegistrableController[] = container.getAll<RegistrableController>(Types.Controller);
         controllers.forEach(controller => controller.register(app));

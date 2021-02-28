@@ -124,7 +124,6 @@ export default class DNAServiceImpl implements DNAService {
 
     /**
      * Informa si el ADN es de mutante o no
-     * 
      * @param dna DNA Array
      */
     public isMutant(dna: Array<string>): boolean {
