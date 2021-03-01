@@ -3,6 +3,8 @@ import { RegistrableController } from './controllers/registrableController';
 import { container } from './config/inversify';
 import { forbiddenResponse, internalResponse } from './util/response';
 import { Forbidden } from './util/exception';
+import { createConnection } from 'typeorm';
+import { options } from './config/db';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -18,6 +20,8 @@ export default class App {
     }
 
     private async init() {
+        await createConnection(options);
+
         const app: Application = express();
         app.set('port', process.env.PORT || 3000);
         app.use(compression());
