@@ -1,10 +1,15 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { isSetsEqual } from '../../util/main';
 import { Forbidden } from '../../util/exception';
+import { DNARepository } from '../../repository/dnaRepository';
+import { DNAEntity } from '../../entity/dnaEntity';
 import DNAService from './dnaService';
+import Types from '../../config/types';
 
 @injectable()
 export default class DNAServiceImpl implements DNAService {
+
+    constructor(@inject(Types.DNARepository) private dnaRepository: DNARepository) {}
 
     /**
      * Valida si un parametro si es un Array
@@ -142,7 +147,45 @@ export default class DNAServiceImpl implements DNAService {
                 }
             }
         }
-        throw new Forbidden('DNA isnt from a mutant');
+        return false;
+    }
+
+    /**
+     * Busca si existe el ADN en nuestra base de datos
+     * @param dna DNA String
+     */
+    public async findDNA(dna: Array<string>): Promise<DNAEntity> {
+        const flatDNA = dna.join();
+        const result = await this.dnaRepository.findByValue(flatDNA);
+        if (!result) return undefined;
+        return result;
+    }
+
+    /**
+     * Confirma si existe un ADN registrado en la DB, si existe, retorna el valor de este
+     * En caso contrario, procede a realizar las operaciones para saber si este ADN es de
+     * un mutante o de un humano, posterior a esto, guarda la información en la BD y retorna
+     * el resultado procesado
+     * @param dnaRegistered Registered DNA on database
+     * @param dna DNA Array
+     */
+    public async processDNA(dnaRegistered: DNAEntity, dna: Array<string>): Promise<boolean> {
+        if (dnaRegistered !== undefined) return dnaRegistered.isMutant;
+        const isMutant = this.isMutant(dna);
+        const flatDNA = dna.join();
+        const dnaEntity: DNAEntity = new DNAEntity(flatDNA, isMutant);
+        await this.dnaRepository.save(dnaEntity);
+        return isMutant;
+    }
+
+    public async getStats(): Promise<{count_mutant_dna: number, count_human_dna: number, ratio: number}> {
+        const result = await this.dnaRepository.findStats();
+        if (!result) return { count_mutant_dna: 0, count_human_dna: 0, ratio: 0 };
+        return {
+            count_mutant_dna: result.mutants,
+            count_human_dna: result.humans,
+            ratio: result.mutants / result.humans
+        };
     }
 
 }

@@ -8,6 +8,8 @@ services:
       - POSTGRES_USER=wolverine
       - POSTGRES_PASSWORD=logan
       - POSTGRES_DB=xmendb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
   xmen:
     build: .
     depends_on:
@@ -21,3 +23,6 @@ services:
       - DB_PASSWORD=logan
       - DB_NAME=xmendb
       - DB_LOGGING=true
+volumes:
+  pgdata:
+    external: false

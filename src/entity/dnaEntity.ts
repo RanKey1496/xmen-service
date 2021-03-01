@@ -3,13 +3,21 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('DNA')
 export class DNAEntity {
 
-    @PrimaryGeneratedColumn()
-    public id: number;
+    constructor(value: string, isMutant: boolean) {
+        this.value = value;
+        this.isMutant = isMutant;
+    }
 
-    @Column({ type: String, nullable: false, unique: true })
+    @PrimaryGeneratedColumn()
+    public id: Number;
+
+    @Column({ nullable: false, unique: true })
     public value: String;
 
-    @Column()
+    @Column({ nullable: false })
+    public isMutant: boolean;
+
+    @Column({ default: () => 'CURRENT_TIMESTAMP' })
     public createdAt: Date = new Date();
 
 }

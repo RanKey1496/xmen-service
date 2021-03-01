@@ -8,7 +8,12 @@ function data(success: boolean, message: string) {
 }
 
 export function dataResponse(res: Response, data: any) {
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json(data);
+}
+
+export function isMutantResponse(res: Response, isMutant: boolean) {
+    if (isMutant) return res.status(200).json({ success: true, data: 'DNA is from mutant' });
+    return res.status(403).json({ success: true, data: 'DNA is from human' });
 }
 
 export function forbiddenResponse(res: Response, message: string) {
