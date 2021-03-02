@@ -5,8 +5,8 @@ import { cacheOptions } from '../config/db';
 const redisClient: RedisClient = createClient(cacheOptions);
 
 export function checkCacheData(req: Request, res: Response, next: NextFunction) {
-    let key = `__expIress__${req.originalUrl || req.url}`;
-    redisClient.get(key, (err, data) => {
+    const cacheKey = `__expIress__${req.originalUrl || req.url}`;
+    redisClient.get(cacheKey, (err, data) => {
         if (err) {
             next();
         }
@@ -19,6 +19,6 @@ export function checkCacheData(req: Request, res: Response, next: NextFunction) 
 }
 
 export function saveCacheData(req: Request, data: any) {
-    let cacheKey = `__expIress__${req.originalUrl || req.url}`;
+    const cacheKey = `__expIress__${req.originalUrl || req.url}`;
     redisClient.setex(cacheKey, 30, JSON.stringify(data));
 }
