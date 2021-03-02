@@ -12,8 +12,8 @@ export const dbOptions: ConnectionOptions = {
     entities: [
         DNAEntity
     ],
-    logging: process.env.DB_LOGGING ? true : false,
-    synchronize: true
+    logging: Boolean(process.env.DB_LOGGING),
+    synchronize: false
 };
 
 export const cacheOptions: ClientOpts = {

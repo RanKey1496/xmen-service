@@ -184,7 +184,7 @@ export default class DNAServiceImpl implements DNAService {
         return {
             count_mutant_dna: result.mutants,
             count_human_dna: result.humans,
-            ratio: result.mutants / result.humans
+            ratio: (result.mutants / result.humans) || 0
         };
     }
 
