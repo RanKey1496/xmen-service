@@ -20,13 +20,16 @@ services:
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.tags=traefik-public
-        - traefik.port=3000
-        - traefik.frontend.rule=Host:api.rankey.info;PathPrefixStrip:/xmen
         - traefik.docker.network=traefik-public
-        - traefik.redirectorservice.frontend.entryPoints=http
-        - traefik.redirectorservice.frontend.redirect.entryPoint=https
-        - traefik.webservice.frontend.entryPoints=https
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.xmen-http.rule="Host(`api.rankey.info`) && PathPrefix(`/xmen`)"
+        - traefik.http.routers.xmen-http.entrypoints=http
+        - traefik.http.routers.xmen-http.middlewares=https-redirect
+        - traefik.http.routers.xmen-https.rule="Host(`api.rankey.info`) && PathPrefix(`/xmen`)"
+        - traefik.http.routers.xmen-https.entrypoints=https
+        - traefik.http.routers.xmen-https.tls=true
+        - traefik.http.routers.xmen-https.tls.certresolver=le
+        - traefik.http.services.xmen.loadbalancer.server.port=3000
 networks:
   postgresql:
     external: true

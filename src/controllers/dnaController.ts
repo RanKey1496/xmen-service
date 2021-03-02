@@ -14,7 +14,7 @@ export class DNAController implements RegistrableController {
 
     public register(app: Application): void {
 
-        app.route('/mutant/')
+        app.route(['/mutant/', '/mutant'])
             .post(async (req: Request, res: Response, next: NextFunction) => {
                 try {
                     const dna = req.body.dna;
@@ -27,7 +27,7 @@ export class DNAController implements RegistrableController {
                 }
             });
 
-        app.route('/stats/')
+        app.route(['/stats/', '/stats'])
             .get(checkCacheData, async (req: Request, res: Response, next: NextFunction) => {
                 try {
                     const result = await this.dnaService.getStats();
