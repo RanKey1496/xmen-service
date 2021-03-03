@@ -5,6 +5,7 @@ import { forbiddenResponse, internalResponse } from './util/response';
 import { Forbidden } from './util/exception';
 import { createConnection } from 'typeorm';
 import { dbOptions } from './config/db';
+import { ENVIRONMENT } from './util/secret';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -30,7 +31,7 @@ export default class App {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(morgan('common'));
-        if (process.env.NODE_ENV === 'development') app.use(errorHandler());
+        if (ENVIRONMENT !== 'production') app.use(errorHandler());
 
         const controllers: RegistrableController[] = container.getAll<RegistrableController>(Types.Controller);
         controllers.forEach(controller => controller.register(app));

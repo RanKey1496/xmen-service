@@ -22,5 +22,6 @@ module.exports = {
 			"lines": 80,
 			"statements": -10
 	  }
-	}
+	},
+	coverageReporters: ["json-summary"]
 };
