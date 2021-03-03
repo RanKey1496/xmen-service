@@ -3,7 +3,7 @@ _Servicio en NodeJS que busca encontrar la mayor cantidad de mutantes de acuerdo
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
-| ![Statements](#statements#) | ![Branches](#branches#) | ![Functions](#functions#) | ![Lines](#lines#)    |
+| ![Statements](https://img.shields.io/badge/Coverage-96.75%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-96.43%25-brightgreen.svg) | ![Functions](https://img.shields.io/badge/Coverage-85.29%25-yellow.svg) | ![Lines](https://img.shields.io/badge/Coverage-95.54%25-brightgreen.svg)    |
 
 ## Comenzando 🚀
 Las instrucciones aquí te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
