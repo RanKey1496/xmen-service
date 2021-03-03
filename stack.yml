@@ -14,7 +14,7 @@ services:
       - DB_USER=wolverine
       - DB_PASSWORD=logan
       - DB_NAME=xmendb
-      - DB_LOGGING=true
+      - DB_LOGGING=false
       - CACHE_HOST=redis
       - CACHE_PASSWORD=quicksilver
     deploy:
