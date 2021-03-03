@@ -1,0 +1,42 @@
+version: '3'
+services:
+  xmen:
+    image: rankey/xmen-service:latest
+    ports:
+      - 3000
+    networks:
+      - traefik-public
+      - postgresql
+      - redis
+    environment:
+      - DB_HOST=postgresql
+      - DB_PORT=5432
+      - DB_USER=wolverine
+      - DB_PASSWORD=logan
+      - DB_NAME=xmendb
+      - DB_LOGGING=true
+      - CACHE_HOST=redis
+      - CACHE_PASSWORD=quicksilver
+    deploy:
+      replicas: 5
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.middlewares.xmen-https.stripprefix.prefixes=/xmen
+        - traefik.http.routers.xmen-http.rule=Host(`api.rankey.info`) && PathPrefix(`/xmen`)
+        - traefik.http.routers.xmen-http.entrypoints=http
+        - traefik.http.routers.xmen-http.middlewares=https-redirect
+        - traefik.http.routers.xmen-https.rule=Host(`api.rankey.info`) && PathPrefix(`/xmen`)
+        - traefik.http.routers.xmen-https.middlewares=xmen-https
+        - traefik.http.routers.xmen-https.entrypoints=https
+        - traefik.http.routers.xmen-https.tls=true
+        - traefik.http.routers.xmen-https.tls.certresolver=le
+        - traefik.http.services.xmen.loadbalancer.server.port=3000
+networks:
+  postgresql:
+    external: true
+  redis:
+    external: true
+  traefik-public:
+    external: true

@@ -1,0 +1,41 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=wolverine
+      - POSTGRES_PASSWORD=logan
+      - POSTGRES_DB=xmendb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  cache:
+    image: bitnami/redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redisdata:/bitnami/redis/data
+    environment:
+      - REDIS_PASSWORD=quicksilver
+  xmen:
+    build: .
+    depends_on:
+      - db
+      - cache
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=wolverine
+      - DB_PASSWORD=logan
+      - DB_NAME=xmendb
+      - DB_LOGGING=true
+      - CACHE_HOST=cache
+      - CACHE_PASSWORD=quicksilver
+volumes:
+  pgdata:
+    external: false
+  redisdata:
+    external: false
