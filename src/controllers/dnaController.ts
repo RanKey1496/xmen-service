@@ -14,6 +14,19 @@ export class DNAController implements RegistrableController {
 
     public register(app: Application): void {
 
+        app.route(['/', 'health'])
+            .get(async (req: Request, res: Response, next: NextFunction) => {
+                try {
+                    const healthCheck = {
+                        uptime: process.uptime(),
+                        timestamp: Date.now()
+                    };
+                    return dataResponse(res, healthCheck);
+                } catch (error) {
+                    return next(error);
+                }
+            });
+
         app.route(['/mutant/', '/mutant'])
             .post(async (req: Request, res: Response, next: NextFunction) => {
                 try {
