@@ -6,6 +6,7 @@ De acuerdo a estas condiciones, desarrollé 3 algoritmos, hice pruebas y me deci
 ### Direcciones posibles
 Para las 3 lógicas de este algoritmo se basó en la misma técnica de direcciones, basicamente en una coordenada vamos a realizar una serie de busquedas hacia todos los lados posibles.
 Arriba, abajo, derecha, izquierda, arriba izquierda, arriba derecha, abajo izquierda, abajo derecha
+[Direcciones](docs/direcciones.png)
 
 ## Lógica 1 - Buscar combinaciones de 4 letras
 Para el primer algoritmo, la idea fue recorrer cada una de las posiciones de la matriz, en cada posición se intenta encontrar una combinación de 4 letras repetidas de acuerdo a la letra en la que se esté en el momento de recorrer, ejemplo, en la posición (3,3) se encuentra la letra C, por lo que se buscará alrededor de esta posición CCCC en todas las **Direcciones posibles**.
