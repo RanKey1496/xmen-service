@@ -18,14 +18,17 @@ services:
       - CACHE_HOST=redis
       - CACHE_PASSWORD=quicksilver
     deploy:
+      replicas: 5
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.xmen-http.rule="Host(`api.rankey.info`) && PathPrefix(`/xmen`)"
+        - traefik.http.middlewares.xmen-https.stripprefix.prefixes=/xmen
+        - traefik.http.routers.xmen-http.rule=Host(`api.rankey.info`) && PathPrefix(`/xmen`)
         - traefik.http.routers.xmen-http.entrypoints=http
         - traefik.http.routers.xmen-http.middlewares=https-redirect
-        - traefik.http.routers.xmen-https.rule="Host(`api.rankey.info`) && PathPrefix(`/xmen`)"
+        - traefik.http.routers.xmen-https.rule=Host(`api.rankey.info`) && PathPrefix(`/xmen`)
+        - traefik.http.routers.xmen-https.middlewares=xmen-https
         - traefik.http.routers.xmen-https.entrypoints=https
         - traefik.http.routers.xmen-https.tls=true
         - traefik.http.routers.xmen-https.tls.certresolver=le
