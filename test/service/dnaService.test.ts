@@ -20,13 +20,13 @@ describe('DNAService', () => {
 
     describe('validateDNA', () => {
         it('should throw Forbidden if dna length is less than 4', () => {
-            const dna: any = 'abcde';
+            const dna: any = ['','',''];
             expect(() => dnaService.validateDNA(dna)).toThrow(Forbidden);
             expect(() => dnaService.validateDNA(dna)).toThrow('Invalid DNA');
         });
 
         it('should throw Forbidden if dna is not a array', () => {
-            const dna: any = ['','',''];
+            const dna: any = 'abcde';
             expect(() => dnaService.validateDNA(dna)).toThrow(Forbidden);
             expect(() => dnaService.validateDNA(dna)).toThrow('Invalid DNA');
         });
