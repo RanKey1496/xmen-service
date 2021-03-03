@@ -1,3 +1,7 @@
+/**
+ * Esta clase utiliza el patrón builder para crear ejemplos de combinaciones
+ * que se utilizarán durante la ejecución de los tests
+ */
 export default class DNATestBuilder {
     private dna: Array<string> = [];
 

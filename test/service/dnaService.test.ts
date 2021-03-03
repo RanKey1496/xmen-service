@@ -16,7 +16,7 @@ describe('DNAService', () => {
         dnaRepository = mock(DNARepository);
         dnaService = new DNAServiceImpl(instance(dnaRepository));
         done();
-    })
+    });
 
     describe('validateDNA', () => {
         it('should throw Forbidden if dna length is less than 4', () => {

@@ -178,6 +178,10 @@ export default class DNAServiceImpl implements DNAService {
         return isMutant;
     }
 
+    /**
+     * Obtiene de la base de datos la cantidad de humanos y mutantes, con este numero calculo
+     * el ratio utilizando: mutantes/humanos
+     */
     public async getStats(): Promise<{count_mutant_dna: number, count_human_dna: number, ratio: number}> {
         const result = await this.dnaRepository.findStats();
         if (!result) return { count_mutant_dna: 0, count_human_dna: 0, ratio: 0 };

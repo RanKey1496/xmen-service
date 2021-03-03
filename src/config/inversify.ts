@@ -6,6 +6,9 @@ import DNAService from '../service/dna/dnaService';
 import DNAServiceImpl from '../service/dna/dnaServiceImpl';
 import Types from './types';
 
+/**
+ * Se define un contenedor para la inversion de dependencias.
+ */
 const container: Container = new Container();
 
 container.bind<RegistrableController>(Types.Controller).to(DNAController);
