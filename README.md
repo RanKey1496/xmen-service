@@ -19,8 +19,8 @@ _Para realizar la instalación local de debe contar con unos requisitos:_
 ```
 _Si se tiene instalado Docker es mucho más fácil, solo se necesita:_
 ```
-Docker
-docker-compose
+- Docker
+- docker-compose
 ```
 
 ### Instalación 🔧
