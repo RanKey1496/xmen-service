@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, release/**, hotfix/** ]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,13 +21,12 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       - name: Log into registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - name: Build image
-        run: docker build rankey/xmen-service:latest .
+        run: docker build -t rankey/xmen-service:latest .
       - name: Push image
         run: docker push rankey/xmen-service:latest
         
