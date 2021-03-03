@@ -4,7 +4,7 @@ import aiohttp
 import asyncio
 from datetime import datetime
 
-MAXREQ = 83000
+MAXREQ = 1000000
 MAXTHREAD = 12
 URL = 'https://api.rankey.info/xmen/stats'
 

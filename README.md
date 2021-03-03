@@ -71,6 +71,9 @@ Una vez instalados nuestros paquetes de npm podemos ejecutar las pruebas con:
 npm test
 ```
 
+**Ñapa**
+En la ruta _/test/stress.py_ se puede encontrar un script de Python, que realiza 1.000.000 de peticiones, divididas en 12 threads, en mi maquina local me ha arrojado que todas las peticiones se completaron con promedio de 40 segundos.
+
 ## Despliegue a la nube 📦
 Para el despliegue a la nube, teniendo en cuenta que el servicio podía recibir muchas peticiones (100 mil a 1 millón), se optó por utilizar un proxy reverso llamado Traefik, esto acompañado del servicio distribuido en varias instancias dentro de varios servidores, orquestado por la herramienta Docker Swarm.
 Para dar marcha a esto, se utilizó la herramienta de GitHub Actions para realizar un build de la imagen de docker del servicio y hacer push al registrador de imagenes en DockerHub cada vez que se hiciera un push a la rama _main_ del repositorio.

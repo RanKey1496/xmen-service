@@ -20,6 +20,10 @@ export default class App {
         this.start();
     }
 
+    /**
+     * Creamos una instancia de express, agregamos plugins que nos ayudarán con logs, errores, compresión y seguridad.
+     * Adicional creamos una conexión a la base de datos Postgresql.
+     */
     private async init() {
         await createConnection(dbOptions);
 
@@ -45,6 +49,9 @@ export default class App {
         return app;
     }
 
+    /**
+     * Ponemos todo en marcha
+     */
     public async start() {
         const app = await this.init();
         const server = app.listen(app.get('port'), async () => {
