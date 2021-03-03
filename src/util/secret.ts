@@ -3,6 +3,9 @@ import fs from 'fs';
 
 export const ENVIRONMENT = process.env.NODE_ENV;
 
+/**
+ * Si nos encontramos en producción, cargamos el archivo .env, en caso contrario .env.dev
+ */
 if (ENVIRONMENT === 'production') {
   if (fs.existsSync('.env')) {
     console.info('Using production environment variables');

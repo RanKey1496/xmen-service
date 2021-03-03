@@ -27,6 +27,11 @@ export class DNARepository {
         return await this.dnaRepository.findOne({ value: dna });
     }
 
+    /**
+     * Retorna la cantidad de mutantes y humanos registrados en la base de datos
+     * Basicamente realiza un COUNT a la tabla que posteriormente se filtrará por
+     * el valor booleano isMutant para contar la totalidad de cada raza
+     */
     public async findStats(): Promise<{ mutants: number, humans: number}> {
         return await this.dnaRepository.createQueryBuilder('dna')
             .select(['COUNT(*) FILTER (WHERE dna.isMutant) AS mutants',
