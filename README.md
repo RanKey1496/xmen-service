@@ -79,7 +79,7 @@ El despliegue será manual.
 Una vez la imagen esté en DockerHub, dentro del archivo _stack.yml_ podemos ver las configuraciones necesarias para hacer funcionar nuestro servicio.
 Debemos tener en cuenta que para esto, previamente se configuró DockerSwarm, Traefik, una instancia de Redis y una de Postgresql.
 
-[Arquitectura](docs/arquitectura.png)
+![Arquitectura](docs/arquitectura.png)
 
 Con el siguiente comando desplegamos nuestro servicio:
 ```
